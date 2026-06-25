@@ -27,11 +27,11 @@ struct LogInputView: View {
                     currentInput = ""
                     showStatusMessage("Saved")
                 }, onCommandShiftReturn: {
-                    guard !currentInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+                    let trimmedInput = currentInput.trimmingCharacters(in: .whitespacesAndNewlines)
+                    logManager.createNewLogFile(withInitialEntry: trimmedInput.isEmpty ? nil : currentInput)
                     
-                    logManager.createNewLogFile(withInitialEntry: currentInput)
                     currentInput = ""
-                    showStatusMessage("Saved to new log file")
+                    showStatusMessage(trimmedInput.isEmpty ? "New log file created" : "Saved to new log file")
                 }, onEscape: {
                     NSApp.sendAction(#selector(NSPopover.performClose(_:)), to: nil, from: nil)
                 })
