@@ -44,8 +44,10 @@ final class LogManager: ObservableObject {
         let rawLineSpacing = UserDefaults.standard.object(forKey: lineSpacingKey) as? Bool ?? false
         let rawFilePrefix = UserDefaults.standard.string(forKey: filePrefixKey) ?? "log"
         
-        let defaultURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("WhisperLogger", isDirectory: true)
+        // --- UPDATED BLOCK HERE ---
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let defaultURL = documentsURL.appendingPathComponent("WhisperLogger_Logs", isDirectory: true)
+        // --------------------------
         
         let resolvedDirectory: URL
         if let savedPath = UserDefaults.standard.string(forKey: lastDirectoryKey),
@@ -55,7 +57,7 @@ final class LogManager: ObservableObject {
         } else {
             resolvedDirectory = defaultURL
         }
-        
+    
         let tempFormatter = DateFormatter()
         tempFormatter.dateFormat = rawUse24Hour ? "yyyy-MM-dd_HH-mm-ss" : "yyyy-MM-dd_hh-mm-ss-a"
         

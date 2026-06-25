@@ -27,11 +27,14 @@ struct LogInputView: View {
                     currentInput = ""
                     showStatusMessage("Saved")
                 }, onCommandShiftReturn: {
-                    guard !currentInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+                    let trimmedInput = currentInput.trimmingCharacters(in: .whitespacesAndNewlines)
+                    logManager.createNewLogFile(withInitialEntry: trimmedInput.isEmpty ? nil : currentInput)
                     
-                    logManager.createNewLogFile(withInitialEntry: currentInput)
                     currentInput = ""
-                    showStatusMessage("Saved to new log file")
+                    showStatusMessage(trimmedInput.isEmpty ? "New log file created" : "Saved to new log file")
+                }, onCommandO: {
+                    // Trigger Finder path workspace revelation
+                    openWorkingFolder()
                 }, onEscape: {
                     NSApp.sendAction(#selector(NSPopover.performClose(_:)), to: nil, from: nil)
                 })
@@ -77,26 +80,48 @@ struct LogInputView: View {
             withAnimation { showStatus = false }
         }
     }
+    
+    private func openWorkingFolder() {
+        let folderURL = logManager.logsDirectory
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.promptsUserIfNeeded = true
+        
+        NSWorkspace.shared.open(folderURL, configuration: configuration) { _, error in
+            if let error = error {
+                print("Error opening folder: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: folderURL.path)
+                }
+            }
+        }
+    }
 }
 
 struct CustomTextEditor: NSViewRepresentable {
     @Binding var text: String
     let onSubmit: () -> Void
     let onCommandShiftReturn: () -> Void
+    let onCommandO: () -> Void
     let onEscape: () -> Void
     
     class CustomTextView: NSTextView {
         var onSubmit: (() -> Void)?
         var onCommandShiftReturn: (() -> Void)?
+        var onCommandO: (() -> Void)?
         var onEscape: (() -> Void)?
         
         override func keyDown(with event: NSEvent) {
-            if event.keyCode == 36 { // Return key
-                if event.modifierFlags.contains([.command, .shift]) {
-                    onCommandShiftReturn?()
+            // Check for Cmd key modifiers
+            if event.modifierFlags.contains(.command) {
+                if event.keyCode == 36 { // Return Key
+                    if event.modifierFlags.contains(.shift) {
+                        onCommandShiftReturn?()
+                    } else {
+                        onSubmit?()
+                    }
                     return
-                } else if event.modifierFlags.contains(.command) {
-                    onSubmit?()
+                } else if event.keyCode == 31 { // 'O' Key
+                    onCommandO?()
                     return
                 }
             } else if event.keyCode == 53 { // Escape key
@@ -135,6 +160,7 @@ struct CustomTextEditor: NSViewRepresentable {
         
         textView.onSubmit = onSubmit
         textView.onCommandShiftReturn = onCommandShiftReturn
+        textView.onCommandO = onCommandO
         textView.onEscape = onEscape
         
         scrollView.documentView = textView
