@@ -8,8 +8,10 @@ A lightweight, native macOS menu bar utility designed for rapid, distraction-fre
 
 * **Menu Bar Resident:** Lives entirely in your status bar—accessible instantly from anywhere via a clean popover.
 * **Smart Keyboard Shortcuts:**
-  * `Return`: Instantly appends your text entry with a custom timestamp.
+  * `⌘ + Return`: Instantly appends your text entry with a custom timestamp.
   * `⌘ + Shift + Return`: Creates a fresh, uniquely timestamped log file and appends your entry right into it.
+  * `⌘ + O`: Opens the working directory.
+  * `⌘ + ,`: Opens the Preferences Window.
   * `Escape`: Instantly dismisses the input window.
 * **Granular Customization:** * Adjustable font pairings (e.g., *JetBrains Mono*, *SF Mono*).
   * Flexible naming layout options, custom prefix formatting, and double-line spacing controls.
