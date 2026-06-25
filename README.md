@@ -42,3 +42,9 @@ A lightweight, native macOS menu bar utility designed for rapid, distraction-fre
 
 ### Output Logs
 ![Generated Plain Text Logs Structure](assets/2.png)
+
+---
+
+## Updates
+
+If you have any feature ideas, please do let me know, and we can work on that swift-ly (pun definitely intended). Plus, if you find any bugs, or memory leaks (I hope not), mention them in the issues panel, and I would love to take a look. Peace!
