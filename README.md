@@ -20,19 +20,6 @@ A lightweight, native macOS menu bar utility designed for rapid, distraction-fre
 
 ---
 
-## Interface Preview
-
-### Core Logging Popover
-![WhisperLogger Main Input Popover](assets/popover.gif)
-
-### Preferences & Customization
-![WhisperLogger Preferences Panel](assets/1.png)
-
-### Output Logs
-![Generated Plain Text Logs Structure](assets/2.png)
-
----
-
 ## Installation & First Launch
 
 1. Go to the [Releases](https://github.com/akwastaken/WhisperLogger/releases) page and download the latest `WhisperLogger_<version>.dmg`.
@@ -45,21 +32,13 @@ A lightweight, native macOS menu bar utility designed for rapid, distraction-fre
 
 ---
 
-## 🛠️ Developer Setup & Architecture
+## Interface Preview
 
-For developers looking to inspect, modify, or compile the source code directly:
+### Core Logging Popover
+![WhisperLogger Main Input Popover](assets/popover.gif)
 
-### Repository Structure
+### Preferences & Customization
+![WhisperLogger Preferences Panel](assets/1.png)
 
-```text
-.
-├── .gitignore                   # Standard Xcode blueprint filter configuration
-├── WhisperLogger
-│   ├── Assets.xcassets          # Application branding assets & iconography
-│   ├── Views/                   # Popover UI framework layouts (Help, Lists)
-│   ├── LogInputView.swift       # Input core engine layer
-│   ├── SettingsView.swift       # Customized layout preferences frame
-│   ├── LogManager.swift         # Core thread-safe file IO serialization controller
-│   └── WhisperLoggerApp.swift   # Headless App lifecycle declaration
-└── WhisperLogger.xcodeproj     # Compilation compilation target architecture blueprint
-```
+### Output Logs
+![Generated Plain Text Logs Structure](assets/2.png)
