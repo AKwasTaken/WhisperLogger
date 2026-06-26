@@ -38,12 +38,6 @@ A lightweight, native macOS menu bar utility designed for rapid, distraction-fre
 ### Core Logging Popover
 ![WhisperLogger Main Input Popover](assets/popover.gif)
 
-### Preferences & Customization
-![WhisperLogger Preferences Panel](assets/1.png)
-
-### Output Logs
-![Generated Plain Text Logs Structure](assets/2.png)
-
 ---
 
 ## Updates
