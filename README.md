@@ -8,6 +8,7 @@ A lightweight, native macOS menu bar utility designed for rapid, distraction-fre
 
 * **Menu Bar Resident:** Lives entirely in your status bar—accessible instantly from anywhere via a clean popover.
 * **Smart Keyboard Shortcuts:**
+  * `⌥ + Space`: Activates the Menu-bar App from anywhere. Hotkey customizable.
   * `⌘ + Return`: Instantly appends your text entry with a custom timestamp.
   * `⌘ + Shift + Return`: Creates a fresh, uniquely timestamped log file and appends your entry right into it.
   * `⌘ + O`: Opens the working directory.
@@ -23,7 +24,7 @@ A lightweight, native macOS menu bar utility designed for rapid, distraction-fre
 ## Installation & First Launch
 
 1. Go to the [Releases](https://github.com/akwastaken/WhisperLogger/releases) page and download the latest `WhisperLogger_<version>.dmg`.
-2. Unzip the file and drag **WhisperLogger.app** into your `Applications` folder.
+2. Open the dmg and drag **WhisperLogger.app** into your `Applications` folder.
 
 > **Note on macOS Security (Gatekeeper):**
 > Because WhisperLogger is distributed independently outside the Mac App Store without an Apple Developer profile signature, macOS will show a warning on first launch (*"App cannot be opened because it is from an unidentified developer"*).
