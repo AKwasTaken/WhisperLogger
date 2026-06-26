@@ -1,4 +1,5 @@
 import SwiftUI
+import KeyboardShortcuts
 
 struct SettingsView: View {
     @EnvironmentObject private var logManager: LogManager
@@ -72,6 +73,20 @@ struct SettingsView: View {
                         }
                     }
                     
+                    
+                    HStack(spacing: 16) {
+                        Text("Global Toggle:")
+                            .frame(width: labelWidth, alignment: .trailing)
+                            .foregroundColor(.secondary)
+                        
+                        HStack {
+                            KeyboardShortcuts.Recorder(for: .toggleWhisperLogger)
+                            
+                            Spacer()
+                        }
+                    }
+                    
+                    
                     // Row 3: Storage Path
                     HStack(spacing: 16) {
                         Text("Storage Path:")
@@ -83,6 +98,7 @@ struct SettingsView: View {
                                 .buttonStyle(.bordered)
                         }
                     }
+                                        
                     
                     // Row 4: File Prefix
                     HStack(spacing: 16) {
@@ -100,6 +116,7 @@ struct SettingsView: View {
                         }
                         .frame(maxWidth: labelWidth)
                     }
+                    
                     
                     
                     // Row 5: BG Tint
@@ -197,6 +214,8 @@ struct SettingsView: View {
         
         logManager.customFilePrefix = "log"
         
+        KeyboardShortcuts.reset(.toggleWhisperLogger)
+        
         bgSelection = Color(.windowBackgroundColor)
         textSelection = .primary
         arrowSelection = .secondary.opacity(0.6)
@@ -208,5 +227,6 @@ struct SettingsView: View {
         
         MenuBarManager.shared.updateStatusBarIcon(named: activeIcon.rawValue)
         NotificationCenter.default.post(name: NSNotification.Name("ThemeChanged"), object: nil)
+
     }
 }

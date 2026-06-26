@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import KeyboardShortcuts
 
 final class MenuBarManager: NSObject, NSWindowDelegate {
     static let shared = MenuBarManager()
@@ -11,6 +12,23 @@ final class MenuBarManager: NSObject, NSWindowDelegate {
     private override init() {
         super.init()
         setupStatusItem()
+        setupGlobalShortcutObserver()
+    }
+    
+    private func setupGlobalShortcutObserver() {
+        // Wraps the registration to safely satisfy MainActor isolation rules
+        Task { @MainActor in
+            KeyboardShortcuts.onKeyDown(for: .toggleWhisperLogger) { [weak self] in
+                guard let self = self else { return }
+                
+                if let popover = self.popover, popover.isShown {
+                    popover.performClose(nil)
+                } else if let button = self.statusItem?.button {
+                    self.showPopover(button)
+                    NSApp.activate(ignoringOtherApps: true)
+                }
+            }
+        }
     }
     
     private func setupStatusItem() {
@@ -46,7 +64,7 @@ final class MenuBarManager: NSObject, NSWindowDelegate {
         }
     }
     
-    private func showPopover(_ sender: NSStatusBarButton) {
+    func showPopover(_ sender: NSStatusBarButton) {
         if let popover = popover, popover.isShown {
             popover.performClose(nil)
             return
@@ -78,13 +96,13 @@ final class MenuBarManager: NSObject, NSWindowDelegate {
     private func showContextMenu(_ sender: NSStatusBarButton) {
         let menu = NSMenu()
         
-        menu.addItem(NSMenuItem(title: "Create New Log File", action: #selector(menuCreateFile), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Create New Log File", action: #selector(menuCreateFile), keyEquivalent: "n"))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Show in Finder", action: #selector(menuShowInFinder), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Settings...", action: #selector(menuOpenSettings), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Show in Finder", action: #selector(menuShowInFinder), keyEquivalent: "o"))
+        menu.addItem(NSMenuItem(title: "Settings...", action: #selector(menuOpenSettings), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
         
-        let quitItem = NSMenuItem(title: "Quit WhisperLogger", action: #selector(menuQuit), keyEquivalent: "")
+        let quitItem = NSMenuItem(title: "Quit WhisperLogger", action: #selector(menuQuit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
         
@@ -106,7 +124,19 @@ final class MenuBarManager: NSObject, NSWindowDelegate {
     
     @objc private func menuShowInFinder() {
         let currentFile = LogManager.shared.currentLogFile
-        NSWorkspace.shared.activateFileViewerSelecting([currentFile])
+        let standardizedURL = URL(fileURLWithPath: currentFile.path)
+        
+        if let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first {
+            if #available(macOS 14.0, *) {
+                NSApp.yieldActivation(to: finderApp)
+            }
+            DispatchQueue.main.async {
+                NSWorkspace.shared.activateFileViewerSelecting([standardizedURL])
+                finderApp.activate(options: [])
+            }
+        } else {
+            NSWorkspace.shared.selectFile(standardizedURL.path, inFileViewerRootedAtPath: "")
+        }
     }
     
     @objc private func menuSelectDirectory() {

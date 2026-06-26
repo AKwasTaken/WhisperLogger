@@ -83,16 +83,29 @@ struct LogInputView: View {
     
     private func openWorkingFolder() {
         let folderURL = logManager.logsDirectory
-        let configuration = NSWorkspace.OpenConfiguration()
-        configuration.promptsUserIfNeeded = true
+        let standardizedURL = URL(fileURLWithPath: folderURL.path)
         
-        NSWorkspace.shared.open(folderURL, configuration: configuration) { _, error in
-            if let error = error {
-                print("Error opening folder: \(error.localizedDescription)")
+        if FileManager.default.fileExists(atPath: standardizedURL.path) {
+            // Find the active instance of Finder running on the system
+            if let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first {
+                
+                // 1. Modern macOS 14+ Cooperative Handoff:
+                // WhisperLogger explicitly grants permission to Finder to take the frontmost focus layer
+                if #available(macOS 14.0, *) {
+                    NSApp.yieldActivation(to: finderApp)
+                }
+                
                 DispatchQueue.main.async {
-                    NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: folderURL.path)
+                    // 2. Open the file view layout window context
+                    NSWorkspace.shared.activateFileViewerSelecting([standardizedURL])
+                    
+                    // 3. Request activation natively (Safe for modern OS execution pipelines)
+                    finderApp.activate(options: [])
                 }
             }
+        } else {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: documentsURL.path)
         }
     }
 }

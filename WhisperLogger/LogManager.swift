@@ -50,10 +50,15 @@ final class LogManager: ObservableObject {
         // --------------------------
         
         let resolvedDirectory: URL
-        if let savedPath = UserDefaults.standard.string(forKey: lastDirectoryKey),
-           let savedURL = URL(string: savedPath),
-           fileManager.fileExists(atPath: savedURL.path) {
-            resolvedDirectory = savedURL
+        if let savedPath = UserDefaults.standard.string(forKey: lastDirectoryKey) {
+            // First try decoding via absolute URI string, fallback to standard POSIX path string
+            let potentialURL = URL(string: savedPath) ?? URL(fileURLWithPath: savedPath)
+            
+            if fileManager.fileExists(atPath: potentialURL.path) {
+                resolvedDirectory = potentialURL
+            } else {
+                resolvedDirectory = defaultURL
+            }
         } else {
             resolvedDirectory = defaultURL
         }
@@ -164,6 +169,30 @@ final class LogManager: ObservableObject {
                 }
             
             DispatchQueue.main.async { self.logFiles = sortedFiles }
+        }
+    }
+    
+    func openLogsDirectoryInFinder() {
+        let standardizedURL = URL(fileURLWithPath: self.logsDirectory.path)
+        
+        if fileManager.fileExists(atPath: standardizedURL.path) {
+            // Find the active instance of Finder running on the system
+            if let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first {
+                
+                // Modern macOS 14+ Cooperative Handoff
+                if #available(macOS 14.0, *) {
+                    NSApp.yieldActivation(to: finderApp)
+                }
+                
+                DispatchQueue.main.async {
+                    NSWorkspace.shared.activateFileViewerSelecting([standardizedURL])
+                    finderApp.activate(options: [])
+                }
+            }
+        } else {
+            // Fallback to documents root if the folder doesn't exist yet
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: documentsURL.path)
         }
     }
 }

@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		41EDB3902FEEEB2A00B17D2D /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 41EDB38F2FEEEB2A00B17D2D /* HotKey */; };
+		41EDB3932FEEEC5B00B17D2D /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 41EDB3922FEEEC5B00B17D2D /* KeyboardShortcuts */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		412C91392CD9DCCE004CF39F /* WhisperLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhisperLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41EDB3902FEEEB2A00B17D2D /* HotKey in Frameworks */,
+				41EDB3932FEEEC5B00B17D2D /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +93,8 @@
 			);
 			name = WhisperLogger;
 			packageProductDependencies = (
+				41EDB38F2FEEEB2A00B17D2D /* HotKey */,
+				41EDB3922FEEEC5B00B17D2D /* KeyboardShortcuts */,
 			);
 			productName = WhisperLogger;
 			productReference = 412C91392CD9DCCE004CF39F /* WhisperLogger.app */;
@@ -115,6 +124,10 @@
 			);
 			mainGroup = 412C91302CD9DCCE004CF39F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				41EDB38E2FEEEB2A00B17D2D /* XCRemoteSwiftPackageReference "HotKey" */,
+				41EDB3912FEEEC5B00B17D2D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 412C913A2CD9DCCE004CF39F /* Products */;
 			projectDirPath = "";
@@ -279,16 +292,12 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
-				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
-				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
-				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WhisperLogger/Info.plist;
@@ -324,16 +333,12 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
-				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
-				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
-				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WhisperLogger/Info.plist;
@@ -380,6 +385,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		41EDB38E2FEEEB2A00B17D2D /* XCRemoteSwiftPackageReference "HotKey" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/soffes/HotKey";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		41EDB3912FEEEC5B00B17D2D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		41EDB38F2FEEEB2A00B17D2D /* HotKey */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 41EDB38E2FEEEB2A00B17D2D /* XCRemoteSwiftPackageReference "HotKey" */;
+			productName = HotKey;
+		};
+		41EDB3922FEEEC5B00B17D2D /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 41EDB3912FEEEC5B00B17D2D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 412C91312CD9DCCE004CF39F /* Project object */;
 }
